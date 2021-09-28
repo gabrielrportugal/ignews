@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
   const {slug} = params;
 
   if (!session?.activeSubscription) {
-    // Redirecionar o usuário que não esteja inscrito
+    // Redirect not subscribed users
     return {
       redirect: {
         destination: '/',

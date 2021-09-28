@@ -1,5 +1,5 @@
 import moment from "moment";
-import { GetStaticProps } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import { RichText } from "prismic-dom";
 import { getPrismicClient } from "../../../services/prismic";
 import Head from 'next/head';
@@ -44,9 +44,9 @@ export default function PostPreview({post}: PostPreviewPros) {
 
           <time>{post.updatedAt}</time>
 
-          <div 
+          <div
             className={`${styles.postContent} ${styles.previewContent}`}
-            dangerouslySetInnerHTML={{__html: post.content}} 
+            dangerouslySetInnerHTML={{__html: post.content}}
           />
 
           <div className={styles.continueReading}>
@@ -62,10 +62,15 @@ export default function PostPreview({post}: PostPreviewPros) {
   )
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  // Pages that will be created (static) at the build process
   return {
     paths: [],
     fallback: 'blocking',
+    // If it's not SSG yet
+    // true -> will render at client browser
+    // false -> will return a 404
+    // blocking -> will render as SSR at first access
   }
 }
 
@@ -86,6 +91,7 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
   return {
     props: {
       post
-    }
+    },
+    redirect: 60 * 30, // 30 minutes
   }
 }
